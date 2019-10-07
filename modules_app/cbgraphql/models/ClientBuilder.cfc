@@ -49,7 +49,13 @@ component {
     function build() {
         var schemaGenerator = createObject( "java", "graphql.schema.idl.SchemaGenerator" ).init();
         var graphQLSchema = schemaGenerator.makeExecutableSchema( buildSchemaDefinition(), buildRuntimeWiring() );
-        return createObject( "java", "graphql.GraphQL" ).newGraphQL( graphQLSchema ).build();
+        var executionStrategy = buildExecutionStrategy();
+
+        return createObject( "java", "graphql.GraphQL" )
+            .newGraphQL( graphQLSchema )
+            .queryExecutionStrategy(executionStrategy)
+            .mutationExecutionStrategy(executionStrategy)
+            .build();
 
     }
 
@@ -93,4 +99,12 @@ component {
         return runtimeWiring.build();
     }
 
+	private function buildExecutionStrategy(){
+        return createObject("java", "graphql.execution.AsyncExecutionStrategy").init(
+            createDynamicProxy(
+                new proxies.ExceptionHandler(),
+                [ "graphql.execution.DataFetcherExceptionHandler" ]
+            )
+        )
+    }
 }
