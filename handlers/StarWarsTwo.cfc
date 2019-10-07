@@ -5,6 +5,7 @@ component {
     function index( event, rc, prc ) {
 
         var cbGraphQLClient = getInstance( "ClientBuilder@cbGraphQL" )
+            .addContext(arguments.prc)
             .addSchema( fileRead( expandPath( "/resources/graphql/starwars.graphql" ) ) )
             .addWiringCFC( "QueryType" )
             // .addWiring( "QueryType", {
