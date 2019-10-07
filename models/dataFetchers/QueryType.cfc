@@ -2,11 +2,11 @@ component {
 
     property name="starWarsData" inject="id";
 
-    function hero( env ) {
+    function hero( env, context ) {
         return variables.starWarsData.artoo;
     }
 
-    function human( env ) {
+    function human( env, context ) {
         var id = arguments.environment.getArguments().get( "id" );
         if ( isNull( id ) ) {
             return;
@@ -14,7 +14,7 @@ component {
         return variables.starWarsData.humans[ id ];
     }
 
-    function droid( env ) {
+    function droid( env, context ) {
         var id = arguments.environment.getArguments().get( "id" );
         if ( isNull( id ) ) {
             return;

@@ -1,16 +1,17 @@
 component {
-
     property name="wirebox" inject="wirebox";
     property name="controller" inject="coldbox";
 
     property name="schemas";
     property name="wirings";
     property name="types";
+    property name="context";
 
     function init() {
         variables.schemas = [];
         variables.wirings = {};
         variables.types = {};
+        variables.context = {};
         return this;
     }
 
@@ -24,6 +25,11 @@ component {
         return this;
     }
 
+    function addContext( required context ) {
+        variables.context = arguments.context;
+        return this;
+    }
+
     function addWiringCFC( required cfc ) {
         if ( isSimpleValue( cfc ) ) {
             arguments.cfc = variables.wirebox.getInstance( dsl = arguments.cfc );
@@ -32,8 +38,8 @@ component {
         var typeName = listLast( md.fullname, "." );
         param md.functions = [];
         var wiringFuncs = md.functions.reduce( function( acc, func ) {
-            acc[ func.name ] = function( env ) {
-                return invoke( cfc, func.name, { "environemnt" = env } );
+            acc[ func.name ] = function( env, data ) {
+                return invoke( cfc, func.name, { "env" = env, "context" = variables.context } );
             };
             return acc;
         }, {} );
