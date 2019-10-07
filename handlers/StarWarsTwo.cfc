@@ -8,25 +8,7 @@ component {
             .addContext(arguments.prc)
             .addSchema( fileRead( expandPath( "/resources/graphql/starwars.graphql" ) ) )
             .addWiringCFC( "QueryType" )
-            // .addWiring( "QueryType", {
-            //     "hero" = function( env ) {
-            //         return variables.artoo;
-            //     },
-            //     "human" = function( env ) {
-            //         var id = arguments.environment.getArguments().get( "id" );
-            //         if ( isNull( id ) ) {
-            //             return;
-            //         }
-            //         return variables.humans[ id ];
-            //     },
-            //     "droid" = function( env ) {
-            //         var id = arguments.environment.getArguments().get( "id" );
-            //         if ( isNull( id ) ) {
-            //             return;
-            //         }
-            //         return variables.droids[ id ];
-            //     }
-            // } )
+			.addWiringCFC( "Mutation" )
             .addWiring( "Human", {
                 "friends" = getFriendsDataFetcher()
             } )
