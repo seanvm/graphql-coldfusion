@@ -38,9 +38,10 @@ component {
         var typeName = listLast( md.fullname, "." );
         param md.functions = [];
         var wiringFuncs = md.functions.reduce( function( acc, func ) {
-            acc[ func.name ] = function( env, data ) {
+            var closure = function( env, data ) {
                 return invoke( cfc, func.name, { "env" = env, "context" = variables.context } );
             };
+            acc[func.name] = closure;
             return acc;
         }, {} );
         addWiring( typeName, wiringFuncs );
@@ -105,7 +106,7 @@ component {
         return runtimeWiring.build();
     }
 
-	private function buildExecutionStrategy(){
+    private function buildExecutionStrategy(){
         return createObject("java", "graphql.execution.AsyncExecutionStrategy").init(
             createDynamicProxy(
                 new proxies.ExceptionHandler(),
